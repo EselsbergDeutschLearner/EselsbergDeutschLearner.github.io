@@ -14,7 +14,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth();
+const auth = getAuth(app);
 const db = getFirestore(app);
 
 // Function to add content to Firestore
@@ -63,7 +63,7 @@ adminForm.addEventListener('submit', (e) => {
 document.addEventListener('DOMContentLoaded', () => {
     let metaCSP = document.createElement('meta');
     metaCSP.httpEquiv = "Content-Security-Policy";
-    metaCSP.content = "default-src 'self'; script-src 'self' https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js;";
+    metaCSP.content = "default-src 'self'; script-src 'self' https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js;";
     document.head.appendChild(metaCSP);
 
     let metaXCTO = document.createElement('meta');
@@ -89,7 +89,9 @@ document.getElementById('loginForm').addEventListener('submit', (e) => {
 onAuthStateChanged(auth, (user) => {
     if (user) {
         document.getElementById('adminSection').style.display = 'block';
+        document.getElementById('loginSection').style.display = 'none';
     } else {
         document.getElementById('adminSection').style.display = 'none';
+        document.getElementById('loginSection').style.display = 'block';
     }
 });
