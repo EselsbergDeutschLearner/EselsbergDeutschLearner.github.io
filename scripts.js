@@ -17,62 +17,7 @@ const app = initializeApp(firebaseConfig);
 const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Function to add content to Firestore
-async function addContent(section, content) {
-    try {
-        await addDoc(collection(db, section), {
-            content: content,
-            timestamp: new Date()
-        });
-        console.log('Content added successfully!');
-    } catch (error) {
-        console.error('Error adding content: ', error);
-    }
-}
-
-// Function to load content from Firestore
-function loadContent(sectionId) {
-    const section = document.getElementById(sectionId);
-    const q = query(collection(db, sectionId), orderBy('timestamp'));
-    onSnapshot(q, (snapshot) => {
-        section.innerHTML = `<h2>${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}</h2>`;
-        snapshot.forEach((doc) => {
-            const content = document.createElement('article');
-            content.textContent = doc.data().content;
-            section.appendChild(content);
-        });
-    });
-}
-
-// Load content for each section
-['vocabulary', 'grammar', 'exercises', 'resources', 'blog'].forEach((sectionId) => {
-    loadContent(sectionId);
-});
-
-// Admin form submission
-const adminForm = document.getElementById('adminForm');
-adminForm.addEventListener('submit', (e) => {
-    e.preventDefault();
-    const section = adminForm['section'].value;
-    const content = adminForm['content'].value;
-    addContent(section, content);
-    adminForm.reset();
-});
-
-// Add security headers using JavaScript
-document.addEventListener('DOMContentLoaded', () => {
-    let metaCSP = document.createElement('meta');
-    metaCSP.httpEquiv = "Content-Security-Policy";
-    metaCSP.content = "default-src 'self'; script-src 'self' https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js;";
-    document.head.appendChild(metaCSP);
-
-    let metaXCTO = document.createElement('meta');
-    metaXCTO.httpEquiv = "X-Content-Type-Options";
-    metaXCTO.content = "nosniff";
-    document.head.appendChild(metaXCTO);
-});
-
-// Authentication functionality
+// Login form submission
 document.getElementById('loginForm').addEventListener('submit', (e) => {
     e.preventDefault();
     const email = e.target['email'].value;
