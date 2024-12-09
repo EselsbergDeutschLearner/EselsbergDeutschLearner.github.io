@@ -4,12 +4,12 @@ import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "fi
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "YOUR_API_KEY",
-    authDomain: "YOUR_AUTH_DOMAIN",
-    projectId: "YOUR_PROJECT_ID",
-    storageBucket: "YOUR_STORAGE_BUCKET",
-    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
-    appId: "YOUR_APP_ID"
+  apiKey: "AIzaSyDAa1KGsbrctzrxDXBLR-OIV4blRIQkytk",
+  authDomain: "b1berufgerman.firebaseapp.com",
+  projectId: "b1berufgerman",
+  storageBucket: "b1berufgerman.firebasestorage.app",
+  messagingSenderId: "49248433061",
+  appId: "1:49248433061:web:3366b7c72a40994c212e4c"
 };
 
 // Initialize Firebase
