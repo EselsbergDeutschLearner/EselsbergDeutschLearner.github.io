@@ -1,5 +1,5 @@
-// Import the functions you need from the SDKs you need
 import { initializeApp } from "firebase/app";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "firebase/firestore";
 
 // Your web app's Firebase configuration
@@ -14,6 +14,7 @@ const firebaseConfig = {
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
+const auth = getAuth();
 const db = getFirestore(app);
 
 // Function to add content to Firestore
@@ -60,15 +61,35 @@ adminForm.addEventListener('submit', (e) => {
 
 // Add security headers using JavaScript
 document.addEventListener('DOMContentLoaded', () => {
-    // Set Content Security Policy
     let metaCSP = document.createElement('meta');
     metaCSP.httpEquiv = "Content-Security-Policy";
     metaCSP.content = "default-src 'self'; script-src 'self' https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js;";
     document.head.appendChild(metaCSP);
 
-    // Set X-Content-Type-Options
     let metaXCTO = document.createElement('meta');
     metaXCTO.httpEquiv = "X-Content-Type-Options";
     metaXCTO.content = "nosniff";
     document.head.appendChild(metaXCTO);
+});
+
+// Authentication functionality
+document.getElementById('loginForm').addEventListener('submit', (e) => {
+    e.preventDefault();
+    const email = e.target['email'].value;
+    const password = e.target['password'].value;
+    signInWithEmailAndPassword(auth, email, password)
+        .then((userCredential) => {
+            console.log('Login successful:', userCredential.user);
+        })
+        .catch((error) => {
+            console.error('Login error:', error.message);
+        });
+});
+
+onAuthStateChanged(auth, (user) => {
+    if (user) {
+        document.getElementById('adminSection').style.display = 'block';
+    } else {
+        document.getElementById('adminSection').style.display = 'none';
+    }
 });
