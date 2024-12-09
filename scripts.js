@@ -4,12 +4,12 @@ import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "fi
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-    apiKey: "AIzaSyDAa1KGsbrctzrxDXBLR-OIV4blRIQkytk",
-    authDomain: "b1berufgerman.firebaseapp.com",
-    projectId: "b1berufgerman",
-    storageBucket: "b1berufgerman.firebaseapp.com",
-    messagingSenderId: "49248433061",
-    appId: "1:49248433061:web:3366b7c72a40994c212e4c"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_AUTH_DOMAIN",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "YOUR_APP_ID"
 };
 
 // Initialize Firebase
@@ -56,4 +56,19 @@ adminForm.addEventListener('submit', (e) => {
     const content = adminForm['content'].value;
     addContent(section, content);
     adminForm.reset();
+});
+
+// Add security headers using JavaScript
+document.addEventListener('DOMContentLoaded', () => {
+    // Set Content Security Policy
+    let metaCSP = document.createElement('meta');
+    metaCSP.httpEquiv = "Content-Security-Policy";
+    metaCSP.content = "default-src 'self'; script-src 'self' https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js;";
+    document.head.appendChild(metaCSP);
+
+    // Set X-Content-Type-Options
+    let metaXCTO = document.createElement('meta');
+    metaXCTO.httpEquiv = "X-Content-Type-Options";
+    metaXCTO.content = "nosniff";
+    document.head.appendChild(metaXCTO);
 });
