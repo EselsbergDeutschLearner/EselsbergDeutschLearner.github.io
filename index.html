@@ -5,17 +5,16 @@
     <title>My Learning Journey</title>
     <link rel="stylesheet" type="text/css" href="styles.css">
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js"></script>
     <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <script src="scripts.js" defer></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-            // Set Content Security Policy
             let metaCSP = document.createElement('meta');
             metaCSP.httpEquiv = "Content-Security-Policy";
-            metaCSP.content = "default-src 'self'; script-src 'self' https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js;";
+            metaCSP.content = "default-src 'self'; script-src 'self' https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js;";
             document.head.appendChild(metaCSP);
 
-            // Set X-Content-Type-Options
             let metaXCTO = document.createElement('meta');
             metaXCTO.httpEquiv = "X-Content-Type-Options";
             metaXCTO.content = "nosniff";
@@ -57,7 +56,7 @@
             <h2>Deutsch</h2>
             <p>Willkommen zu meinem Lernreise. Dieser Abschnitt ist auf Deutsch.</p>
         </section>
-        <section id="admin">
+        <section id="adminSection" style="display: none;">
             <h2>Admin Section</h2>
             <form id="adminForm">
                 <label for="section">Section:</label>
@@ -71,6 +70,16 @@
                 <label for="content">Content:</label>
                 <textarea id="content" name="content" rows="4" cols="50"></textarea>
                 <button type="submit">Add Content</button>
+            </form>
+        </section>
+        <section id="loginSection">
+            <h2>Login</h2>
+            <form id="loginForm">
+                <label for="email">Email:</label>
+                <input type="email" id="email" name="email" required>
+                <label for="password">Password:</label>
+                <input type="password" id="password" name="password" required>
+                <button type="submit">Login</button>
             </form>
         </section>
     </main>
