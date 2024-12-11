@@ -1,42 +1,61 @@
 import { initializeApp } from "firebase/app";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "firebase/auth";
 import { getFirestore, collection, addDoc, query, orderBy, onSnapshot } from "firebase/firestore";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "AIzaSyC9qJ97esOIty5Jh4ad9JHZJFwDww0OAJk",
-  authDomain: "b1berufgerman-fda4c.firebaseapp.com",
-  projectId: "b1berufgerman-fda4c",
-  storageBucket: "b1berufgerman-fda4c.firebasestorage.app",
-  messagingSenderId: "1064039262468",
-  appId: "1:1064039262468:web:caeaf1255d6a897940c851"
+    apiKey: "YOUR_API_KEY",
+    authDomain: "YOUR_USERNAME.github.io",
+    projectId: "YOUR_PROJECT_ID",
+    storageBucket: "YOUR_STORAGE_BUCKET",
+    messagingSenderId: "YOUR_MESSAGING_SENDER_ID",
+    appId: "1:49248433061:web:3366b7c72a40994c212e4c"
 };
 
 // Initialize Firebase
 const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
 const db = getFirestore(app);
 
-// Login form submission
-document.getElementById('loginForm').addEventListener('submit', (e) => {
-    e.preventDefault();
-    const email = e.target['email'].value;
-    const password = e.target['password'].value;
-    signInWithEmailAndPassword(auth, email, password)
-        .then((userCredential) => {
-            console.log('Login successful:', userCredential.user);
-        })
-        .catch((error) => {
-            console.error('Login error:', error.message);
+// Function to add content to Firestore
+async function addContent(section, content) {
+    try {
+        await addDoc(collection(db, section), {
+            content: content,
+            timestamp: new Date()
         });
+        console.log('Content added successfully!');
+    } catch (error) {
+        console.error('Error adding content: ', error);
+    }
+}
+
+// Function to load content from Firestore
+function loadContent(sectionId) {
+    const section = document.getElementById(sectionId);
+    const q = query(collection(db, sectionId), orderBy('timestamp'));
+    onSnapshot(q, (snapshot) => {
+        section.innerHTML = `<h2>${sectionId.charAt(0).toUpperCase() + sectionId.slice(1)}</h2>`;
+        snapshot.forEach((doc) => {
+            const content = document.createElement('article');
+            content.textContent = doc.data().content;
+            section.appendChild(content);
+        });
+    });
+}
+
+// Load content for each section
+['vocabulary', 'grammar', 'exercises', 'resources', 'blog'].forEach((sectionId) => {
+    loadContent(sectionId);
 });
 
-onAuthStateChanged(auth, (user) => {
-    if (user) {
-        document.getElementById('adminSection').style.display = 'block';
-        document.getElementById('loginSection').style.display = 'none';
-    } else {
-        document.getElementById('adminSection').style.display = 'none';
-        document.getElementById('loginSection').style.display = 'block';
-    }
+// Add security headers using JavaScript
+document.addEventListener('DOMContentLoaded', () => {
+    let metaCSP = document.createElement('meta');
+    metaCSP.httpEquiv = "Content-Security-Policy";
+    metaCSP.content = "default-src 'self'; script-src 'self' https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js;";
+    document.head.appendChild(metaCSP);
+
+    let metaXCTO = document.createElement('meta');
+    metaXCTO.httpEquiv = "X-Content-Type-Options";
+    metaXCTO.content = "nosniff";
+    document.head.appendChild(metaXCTO);
 });
