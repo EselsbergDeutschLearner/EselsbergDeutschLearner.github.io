@@ -1,0 +1,34 @@
+name: Deploy to Firebase
+
+on:
+  push:
+    branches:
+      - main  # or master if your main branch is named master
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Setup Node.js environment
+        uses: actions/setup-node@v2
+        with:
+          node-version: '14'
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Build project
+        run: npm run build
+
+      - name: Deploy to Firebase
+        env:
+          FIREBASE_SERVICE_ACCOUNT_KEY: ${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}
+        run: |
+          npm install -g firebase-tools
+          echo "${{ secrets.FIREBASE_SERVICE_ACCOUNT_KEY }}" > ${HOME}/firebase-key.json
+          firebase use --add --project b1berufgerman-fda4c
+          firebase deploy --only hosting --token "$(firebase login:ci --json < ${HOME}/firebase-key.json | jq -r .token)"
